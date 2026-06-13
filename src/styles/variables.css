@@ -1,0 +1,10 @@
+:root {
+    --primary-color: #4A90E2;
+    --secondary-color: #50E3C2;
+    --background-color: #F5F7FA;
+    --text-color: #333333;
+    --heading-font: 'Roboto', sans-serif;
+    --body-font: 'Arial', sans-serif;
+    --border-radius: 8px;
+    --transition-speed: 0.3s;
+}
