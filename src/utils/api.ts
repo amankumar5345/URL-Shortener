@@ -9,7 +9,8 @@ export const getShortenedUrls = async (): Promise<ShortenedURL[]> => {
     }
 
     try {
-        return JSON.parse(stored) as ShortenedURL[];
+        const parsed: ShortenedURL[] = JSON.parse(stored);
+        return parsed;
     } catch {
         return [];
     }

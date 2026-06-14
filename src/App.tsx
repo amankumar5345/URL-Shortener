@@ -8,8 +8,7 @@ const App: React.FC = () => {
     const redirect = sessionStorage.redirect;
     delete sessionStorage.redirect;
     if (redirect && redirect !== location.pathname) {
-      // Extract slug from the redirect path
-      const pathParts = redirect.split('/').filter(p => p && p !== 'URL-Shortener');
+      const pathParts = redirect.split('/').filter((p: string) => p && p !== 'URL-Shortener');
       if (pathParts.length > 0) {
         window.location.pathname = `/URL-Shortener/${pathParts[0]}`;
       }
@@ -27,4 +26,5 @@ const App: React.FC = () => {
 };
 
 export default App;
+
 
