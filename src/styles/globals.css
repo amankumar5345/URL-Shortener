@@ -57,6 +57,17 @@ a {
     background-color: #218838;
 }
 
+.error {
+    color: #d8000c;
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.dark-mode {
+    background-color: #121212;
+    color: #e8e6e3;
+}
+
 .shortened-list {
     list-style-type: none;
     padding: 0;

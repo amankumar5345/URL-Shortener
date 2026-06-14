@@ -1,13 +1,34 @@
-import axios from 'axios';
+﻿import { ShortenedURL } from '../types';
 
-const API_BASE_URL = 'https://api.example.com'; // Replace with your actual API base URL
+const STORAGE_KEY = 'shortenedUrls';
 
-export const shortenUrl = async (url: string): Promise<string> => {
-    const response = await axios.post(`${API_BASE_URL}/shorten`, { url });
-    return response.data.shortenedUrl;
+export const getShortenedUrls = async (): Promise<ShortenedURL[]> => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (!stored) {
+        return [];
+    }
+
+    try {
+        return JSON.parse(stored) as ShortenedURL[];
+    } catch {
+        return [];
+    }
 };
 
-export const getShortenedUrls = async (): Promise<string[]> => {
-    const response = await axios.get(`${API_BASE_URL}/shortened-urls`);
-    return response.data.urls;
+const createSlug = () => Math.random().toString(36).substring(2, 8);
+
+export const shortenUrl = async (url: string): Promise<ShortenedURL> => {
+    const slug = createSlug();
+    const shortenedUrl = `${window.location.origin}/${slug}`;
+    const nextUrl: ShortenedURL = {
+        originalUrl: url,
+        shortenedUrl,
+        createdAt: new Date().toISOString(),
+    };
+
+    const currentUrls = await getShortenedUrls();
+    const updatedUrls = [nextUrl, ...currentUrls];
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUrls));
+
+    return nextUrl;
 };

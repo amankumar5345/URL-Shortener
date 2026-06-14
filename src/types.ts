@@ -1,7 +1,7 @@
 export interface ShortenedURL {
     originalUrl: string;
     shortenedUrl: string;
-    createdAt: Date;
+    createdAt: string;
 }
 
 export interface Theme {

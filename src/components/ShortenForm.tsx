@@ -1,32 +1,57 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 
-const ShortenForm: React.FC = () => {
+interface ShortenFormProps {
+    onShorten: (url: string) => Promise<void>;
+    isSaving: boolean;
+}
+
+const ShortenForm: React.FC<ShortenFormProps> = ({ onShorten, isSaving }) => {
     const [url, setUrl] = useState('');
     const [error, setError] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!url) {
-            setError('Please enter a URL');
+    const validateUrl = (value: string) => {
+        try {
+            const parsed = new URL(value);
+            return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+        } catch {
+            return false;
+        }
+    };
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setError('');
+
+        const trimmed = url.trim();
+        if (!trimmed) {
+            setError('Please enter a URL.');
             return;
         }
-        setError('');
-        // Handle URL shortening logic here
-        console.log('URL to shorten:', url);
+
+        if (!validateUrl(trimmed)) {
+            setError('Please enter a valid URL starting with http:// or https://.');
+            return;
+        }
+
+        await onShorten(trimmed);
+        setUrl('');
     };
 
     return (
-        <form onSubmit={handleSubmit} className="shorten-form">
+        <form className="form" onSubmit={handleSubmit}>
             <input
+                className="input"
                 type="url"
-                placeholder="Enter your URL here"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                className={`url-input ${error ? 'error' : ''}`}
-                required
+                placeholder="https://example.com"
+                disabled={isSaving}
+                aria-label="URL to shorten"
             />
-            <button type="submit" className="shorten-button">Shorten</button>
-            {error && <p className="error-message">{error}</p>}
+            {error && <p className="error">{error}</p>}
+            <button className="button" type="submit" disabled={isSaving}>
+                {isSaving ? 'Shortening...' : 'Shorten URL'}
+            </button>
         </form>
     );
 };

@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 
 const ThemeToggle: React.FC = () => {
-    const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+    const [darkMode, setDarkMode] = useState(false);
 
-    const toggleTheme = () => {
-        setIsDarkMode(!isDarkMode);
-        document.body.classList.toggle('dark-mode', !isDarkMode);
-    };
+    useEffect(() => {
+        document.body.classList.toggle('dark-mode', darkMode);
+    }, [darkMode]);
 
     return (
-        <button onClick={toggleTheme} className="theme-toggle">
-            {isDarkMode ? 'Light Mode' : 'Dark Mode'}
-        </button>
+        <div className="theme-toggle">
+            <button className="button" type="button" onClick={() => setDarkMode((prev) => !prev)}>
+                {darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            </button>
+        </div>
     );
 };
 
